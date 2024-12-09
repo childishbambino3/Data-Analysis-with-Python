@@ -1,0 +1,31 @@
+import pandas as pd
+df = pd.read_excel(r'C:\Users\Felice\Documents\projects\Data Project\Netflix_Movies_and_TV_Shows.xlsx')
+print("First 5 rows of the dataset:")
+print(df.head())
+print("\nColumn Names before cleaning:")
+print(df.columns)
+df.columns = df.columns.str.strip()
+print("\nCheck for missing values in the dataset:")
+missing_values = df.isnull().sum()
+print(missing_values)
+if 'rating' in df.columns:
+    df['rating'] = df['rating'].fillna('Not Rated')
+else:
+    print("No 'rating' column found")
+df['Release Year'] = df['Release Year'].astype(int)
+df['Duration'] = df['Duration'].astype(str)
+df['Decade'] = (df['Release Year'] // 10) * 10
+print("\nDescriptive Statistics:")
+print(df.describe())
+import matplotlib.pyplot as plt
+df['Type'].value_counts().plot(kind='bar', title='Count of Movies vs TV Shows')
+plt.xlabel('Type')
+plt.ylabel('Count')
+plt.show()
+top_genres = df['Genre'].value_counts().head(10)
+print("\nTop 10 Genres:")
+print(top_genres)
+print("\nConclusion:")
+print("Based on the analysis, 'Action' movies and TV shows are the most popular genre in the dataset.")
+print("Recommendation: Further explore the trends within the 'Action' genre for better insights.")
+df.to_excel(r'C:\Users\Felice\Documents\projects\Data Project\Cleaned_Netflix_Movies_and_TV_Shows.xlsx', index=False)
